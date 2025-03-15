@@ -1,5 +1,5 @@
 function heroInventory(inputArr) {
-    heroesList = [];
+    let heroesList = [];
 
     for (let heroData of inputArr) {
         let [name, level, items] = heroData.split(' / ');
