@@ -1,7 +1,7 @@
 function dictionary(inputArr) {
     let myDictionary = {};
 
-    for (currentJSON of inputArr) {
+    for (let currentJSON of inputArr) {
         let termDefinition = JSON.parse(currentJSON);
 
         myDictionary[Object.keys(termDefinition)[0]] = Object.values(termDefinition)[0];
