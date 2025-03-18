@@ -3,7 +3,7 @@ function heroInventory(inputArr) {
 
     for (let heroData of inputArr) {
         let [name, level, items] = heroData.split(' / ');
-        heroesList.push({ 'name': name, 'level': Number(level), 'items': items });
+        heroesList.push({ name, 'level': Number(level), items });
     }
 
     heroesList.sort((a,b)=>a.level-b.level).forEach(
@@ -11,9 +11,9 @@ function heroInventory(inputArr) {
     );
 }
 
-// heroInventory([
-//     'Isacc / 25 / Apple, GravityGun',
-//     'Derek / 12 / BarrelVest, DestructionSword',
-//     'Hes / 1 / Desolator, Sentinel, Antara'
-//     ]
-//     );
+heroInventory([
+    'Isacc / 25 / Apple, GravityGun',
+    'Derek / 12 / BarrelVest, DestructionSword',
+    'Hes / 1 / Desolator, Sentinel, Antara'
+    ]
+    );
