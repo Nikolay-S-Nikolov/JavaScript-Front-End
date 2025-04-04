@@ -83,16 +83,20 @@ function showAllVacations(vacations) {
             editVacation.removeAttribute('disabled');
             editVacation.classList.add(vaction._id);
 
-            editVacation.addEventListener('click', (e) => {
+            editVacation.addEventListener('click', editVacationEventListener);
+
+            function editVacationEventListener(e) {
                 e.preventDefault();
 
                 let [name, days, date] = [nameEl.value, numDaysEl.value, fromDateEl.value];
                 let chnagedVacation = { name, days, date, _id: vaction._id };
-                
+
                 editVacation.setAttribute('disabled', '');
                 addVacation.removeAttribute('disabled');
                 editVacationData(chnagedVacation, vaction._id);
-            })
+                
+                editVacation.removeEventListener('click', editVacationEventListener);
+            }
         });
 
         doneBtnEl.addEventListener('click', (e) => {
@@ -115,4 +119,3 @@ function clearInputFields() {
 
 addVacation.addEventListener('click', takeVacationData)
 loadVacationsBtn.addEventListener('click', loadVacationData)
-
