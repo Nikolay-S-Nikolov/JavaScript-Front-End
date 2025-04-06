@@ -9,6 +9,7 @@ let dateEl = document.getElementById('date');
 let addWeatherBtn = document.getElementById('add-weather');
 let editWeatherBtn = document.getElementById('edit-weather');
 
+let objId;
 
 function getHistoryData() {
     fetch(baseUrl)
@@ -27,8 +28,8 @@ function addWeaterData(newData) {
         .catch(error => console.error('Error:', error));
 }
 
-function editWeatherData(dataToEdit, dataId) {
-    fetch(baseUrl + dataId, {
+function editWeatherData(dataToEdit) {
+    fetch(baseUrl + dataToEdit._id, {
         method: 'PUT',
         body: JSON.stringify(dataToEdit)
     })
@@ -76,26 +77,10 @@ function showHistory(history) {
 
             addWeatherBtn.setAttribute('disabled', '');
             editWeatherBtn.removeAttribute('disabled');
+            objId = city._id;
 
+            editWeatherBtn.removeEventListener('click', editWeatherEventListener);
             editWeatherBtn.addEventListener('click', editWeatherEventListener);
-
-            function editWeatherEventListener() {
-                if (!locationEl.value || !temperatureEl.value || !dateEl.value) return;
-
-                editWeatherBtn.setAttribute('disabled', '');
-                addWeatherBtn.removeAttribute('disabled');
-
-                editWeatherData(
-                    {
-                        location: locationEl.value,
-                        temperature: temperatureEl.value,
-                        date: dateEl.value,
-                        _id: city._id
-                    }, city._id);
-
-                [locationEl, temperatureEl, dateEl].forEach((x) => x.value = '');
-                editWeatherBtn.removeEventListener('click', editWeatherEventListener);
-            }
         });
 
         deleteBtnEl.addEventListener('click', (e) => {
@@ -103,6 +88,23 @@ function showHistory(history) {
             delWeatherData(city._id);
         });
     });
+}
+
+function editWeatherEventListener() {
+    if (!locationEl.value || !temperatureEl.value || !dateEl.value) return;
+
+    editWeatherBtn.setAttribute('disabled', '');
+    addWeatherBtn.removeAttribute('disabled');
+
+    editWeatherData(
+        {
+            location: locationEl.value,
+            temperature: temperatureEl.value,
+            date: dateEl.value,
+            _id: objId
+        });
+
+    [locationEl, temperatureEl, dateEl].forEach((x) => x.value = '');
 }
 
 function createElement(tag, properties, container = null) {

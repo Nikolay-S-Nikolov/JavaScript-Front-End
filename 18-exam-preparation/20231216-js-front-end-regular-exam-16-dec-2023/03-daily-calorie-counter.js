@@ -10,6 +10,8 @@ let editMealBtnEl = document.getElementById('edit-meal');
 
 let mealListEl = document.getElementById('list');
 
+let objId;
+
 function loadMealsData() {
     fetch(baseUrl)
         .then(res => res.json())
@@ -27,8 +29,8 @@ function addMealData(obj) {
         .catch(err => console.error(err));
 }
 
-function changeMealData(changhedObj, objId) {
-    fetch(baseUrl + objId, {
+function changeMealData(changhedObj) {
+    fetch(baseUrl + changhedObj._id, {
         method: 'PUT',
         body: JSON.stringify(changhedObj)
     })
@@ -71,21 +73,10 @@ function showAllMeals(meals) {
 
             [foodEl.value, timeEl.value, caloriesEl.value] = [meal.food, meal.time, meal.calories];
             mealDivEl.remove();
+            objId = meal._id
 
+            editMealBtnEl.removeEventListener('click', editMealEventListener);
             editMealBtnEl.addEventListener('click', editMealEventListener);
-
-            function editMealEventListener() {
-                if (!foodEl.value || !timeEl.value || !caloriesEl.value) return;
-
-                let editedMeal = {
-                    food: foodEl.value,
-                    time: timeEl.value,
-                    calories: caloriesEl.value,
-                    _id: meal._id
-                };
-                changeMealData(editedMeal, meal._id);
-                editMealBtnEl.removeEventListener('click', editMealEventListener);
-            }
         });
 
         deleteMealBtnEl.addEventListener('click', (e) => {
@@ -93,6 +84,18 @@ function showAllMeals(meals) {
             delMealData(meal._id);
         });
     })
+}
+
+function editMealEventListener() {
+    if (!foodEl.value || !timeEl.value || !caloriesEl.value) return;
+
+    let editedMeal = {
+        food: foodEl.value,
+        time: timeEl.value,
+        calories: caloriesEl.value,
+        _id: objId
+    };
+    changeMealData(editedMeal);
 }
 
 function takeMealDataEventListener() {
