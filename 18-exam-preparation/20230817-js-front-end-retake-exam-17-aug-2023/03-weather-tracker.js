@@ -11,6 +11,7 @@ let editWeatherBtn = document.getElementById('edit-weather');
 
 let objId;
 
+
 function getHistoryData() {
     fetch(baseUrl)
         .then(res => res.json())
@@ -71,9 +72,9 @@ function showHistory(history) {
         let changeBtnEl = createElement('button', { className: 'change-btn', textContent: 'Change' }, buttonsDivEl);
         let deleteBtnEl = createElement('button', { className: 'delete-btn', textContent: 'Delete' }, buttonsDivEl);
 
-        changeBtnEl.addEventListener('click', (e) => {
+        changeBtnEl.addEventListener('click', () => {
             [locationEl.value, temperatureEl.value, dateEl.value] = [city.location, city.temperature, city.date];
-            divEl.remove();
+            listHistoryEl.removeChild(divEl);
 
             addWeatherBtn.setAttribute('disabled', '');
             editWeatherBtn.removeAttribute('disabled');
@@ -83,7 +84,7 @@ function showHistory(history) {
             editWeatherBtn.addEventListener('click', editWeatherEventListener);
         });
 
-        deleteBtnEl.addEventListener('click', (e) => {
+        deleteBtnEl.addEventListener('click', () => {
             divEl.remove();
             delWeatherData(city._id);
         });
