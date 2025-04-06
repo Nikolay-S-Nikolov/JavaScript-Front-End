@@ -9,6 +9,8 @@ let nameEl = document.getElementById('name');
 let numDaysEl = document.getElementById('num-days');
 let fromDateEl = document.getElementById('from-date');
 
+let objId;
+
 function delteVacationData(delId) {
     fetch(baseUrl + delId, {
         method: 'DELETE',
@@ -20,8 +22,8 @@ function delteVacationData(delId) {
         .catch(error => console.error('Error:', error));
 }
 
-function editVacationData(edietedVacation, vacId) {
-    fetch(baseUrl + vacId, {
+function editVacationData(edietedVacation) {
+    fetch(baseUrl + edietedVacation._id, {
         method: 'PUT',
         body: JSON.stringify(edietedVacation)
     })
@@ -47,7 +49,7 @@ function addVacationData(newVacation) {
     })
         .then(res => res.json())
         .then(() => {
-            loadVacationData();            
+            loadVacationData();
         })
         .catch(error => console.error('Error:', error));
 }
@@ -82,21 +84,10 @@ function showAllVacations(vacations) {
             addVacation.setAttribute('disabled', '');
             editVacation.removeAttribute('disabled');
             editVacation.classList.add(vaction._id);
+            objId = vaction._id;
 
+            editVacation.removeEventListener('click', editVacationEventListener);
             editVacation.addEventListener('click', editVacationEventListener);
-
-            function editVacationEventListener(e) {
-                e.preventDefault();
-
-                let [name, days, date] = [nameEl.value, numDaysEl.value, fromDateEl.value];
-                let chnagedVacation = { name, days, date, _id: vaction._id };
-
-                editVacation.setAttribute('disabled', '');
-                addVacation.removeAttribute('disabled');
-                editVacationData(chnagedVacation, vaction._id);
-                
-                editVacation.removeEventListener('click', editVacationEventListener);
-            }
         });
 
         doneBtnEl.addEventListener('click', (e) => {
@@ -104,6 +95,17 @@ function showAllVacations(vacations) {
         });
     })
 
+}
+
+function editVacationEventListener(e) {
+    e.preventDefault();
+
+    let [name, days, date] = [nameEl.value, numDaysEl.value, fromDateEl.value];
+    let chnagedVacation = { name, days, date, _id: objId };
+
+    editVacation.setAttribute('disabled', '');
+    addVacation.removeAttribute('disabled');
+    editVacationData(chnagedVacation);
 }
 
 function createElement(tag, properties, container = null) {
@@ -117,5 +119,6 @@ function clearInputFields() {
     [nameEl, numDaysEl, fromDateEl].forEach(x => x.value = '');
 }
 
-addVacation.addEventListener('click', takeVacationData)
-loadVacationsBtn.addEventListener('click', loadVacationData)
+addVacation.addEventListener('click', takeVacationData);
+loadVacationsBtn.addEventListener('click', loadVacationData);
+
