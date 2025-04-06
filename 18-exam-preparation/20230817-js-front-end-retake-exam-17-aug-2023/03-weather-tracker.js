@@ -11,7 +11,6 @@ let editWeatherBtn = document.getElementById('edit-weather');
 
 let objId;
 
-
 function getHistoryData() {
     fetch(baseUrl)
         .then(res => res.json())
